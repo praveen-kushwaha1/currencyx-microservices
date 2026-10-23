@@ -1,0 +1,6 @@
+# Example shared configuration served by Config Server.
+# Add service-specific settings to files such as currency-exchange-service.yml.
+management:
+  endpoint:
+    health:
+      show-details: always

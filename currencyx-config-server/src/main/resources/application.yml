@@ -1,0 +1,10 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: currencyx-config-server
+  cloud:
+    config:
+      enable: false
+

@@ -4,3 +4,30 @@ server:
 spring:
   application:
     name: currency-exchange-service
+
+  # H2 Database Configuration
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: update      # Automatically creates or updates tables based on your Entity classes
+    defer-datasource-initialization: true
+
+    # --- ADDED PROPERTIES TO SHOW SQL ---
+    show-sql: true          # Prints all SQL statements to the console
+    properties:
+      hibernate:
+        format_sql: true    # Pretty-prints SQL queries onto multiple lines for readability
+
+  # H2 Web Console Settings
+  h2:
+    console:
+      enabled: true
+      path: /h2

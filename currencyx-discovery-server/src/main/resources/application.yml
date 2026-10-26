@@ -3,4 +3,16 @@ server:
 
 spring:
   application:
-    name: currencyx-discovery-server
+    name: currencyx-eureka-server
+
+eureka:
+  client:
+    # This application is the registry, not a service client.
+    register-with-eureka: false
+    fetch-registry: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

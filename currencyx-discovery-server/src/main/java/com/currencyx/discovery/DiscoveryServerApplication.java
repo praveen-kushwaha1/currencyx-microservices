@@ -4,7 +4,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
-/** Eureka registry for the CurrencyX services. */
+/**
+ * Starts the CurrencyX Eureka Server.
+ *
+ * @EnableEurekaServer enables the service registry,
+ * allowing microservices to register and discover each other.
+ */
 @SpringBootApplication
 @EnableEurekaServer
 public class DiscoveryServerApplication {

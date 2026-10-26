@@ -1,4 +1,3 @@
-
 server:
   port: 8888
 
@@ -10,11 +9,9 @@ spring:
     config:
       server:
         git:
-          # Use forward slashes for a Windows file path.
-          uri: "file:///C:/Users/prave/Repo/Training/Currecnyx/CurrenMS/currencyx-microservices/currencyx-config-server/config-repo"
-
+          uri: https://github.com/praveen-kushwaha1/currencyx-microservices.git
+          search-paths: currencyx-config-server/config-repo
           default-label: main
-          refresh-rate: 0
 
 management:
   endpoints:

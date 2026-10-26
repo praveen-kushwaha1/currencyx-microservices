@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * Spring Cloud OpenFeign generates the implementation automatically.
  */
 @FeignClient(
-        name = "currency-exchange-client",
-        url = "${currency-exchange.url}"
+        name = "currency-exchange-service"
 )
 public interface CurrencyExchangeFeignClient {
 

@@ -1,5 +1,6 @@
 package com.currencyx.conversion.service;
 
+import com.currencyx.conversion.client.feign.CurrencyExchangeFeignClient;
 import com.currencyx.conversion.dto.CurrencyConversionResponse;
 import com.currencyx.conversion.dto.CurrencyExchangeResponse;
 
@@ -18,16 +19,18 @@ public class CurrencyConversionService {
 
     private final RestTemplate restTemplate;
     private final String exchangeServiceUrl;
+    private final CurrencyExchangeFeignClient currencyExchangeFeignClient;
 
     /**
      * Constructor-based dependency injection.
      */
     public CurrencyConversionService(
             RestTemplate restTemplate,
-            @Value("${currency-exchange.url}") String exchangeServiceUrl) {
+            @Value("${currency-exchange.url}") String exchangeServiceUrl, CurrencyExchangeFeignClient currencyExchangeFeignClient) {
 
         this.restTemplate = restTemplate;
         this.exchangeServiceUrl = exchangeServiceUrl;
+        this.currencyExchangeFeignClient = currencyExchangeFeignClient;
     }
 
     /**
@@ -42,14 +45,16 @@ public class CurrencyConversionService {
         String url = exchangeServiceUrl
                 + "/currency-exchange/from/{from}/to/{to}";
 
+        CurrencyExchangeResponse exchangeResponse=currencyExchangeFeignClient.getExchangeRate(from ,to);
+
         // Call the exchange service and deserialize its JSON response.
-        CurrencyExchangeResponse exchangeResponse =
-                restTemplate.getForObject(
-                        url,
-                        CurrencyExchangeResponse.class,
-                        from,
-                        to
-                );
+//        CurrencyExchangeResponse exchangeResponse =
+//                restTemplate.getForObject(
+//                        url,
+//                        CurrencyExchangeResponse.class,
+//                        from,
+//                        to
+//                );
 
         // Protect against an unexpected empty response.
         if (exchangeResponse == null

@@ -1,5 +1,12 @@
 # Example shared configuration served by Config Server.
 # Add service-specific settings to files such as currency-exchange-service.yml.
+
+# Shared configuration for all CurrencyX services.
+# Add common properties here when needed.
+spring:
+  jackson:
+    default-property-inclusion: non_null
+
 management:
   endpoint:
     health:

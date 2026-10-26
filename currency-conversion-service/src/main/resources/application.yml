@@ -1,9 +1,5 @@
-server:
-  port: 8082
-
 spring:
   application:
     name: currency-conversion-service
-
-currency-exchange:
-  url: http://localhost:8081
+  config:
+    import: "optional:configserver:http://localhost:8888"

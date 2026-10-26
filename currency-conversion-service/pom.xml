@@ -12,15 +12,22 @@
     <artifactId>currency-conversion-service</artifactId>
     <name>currency-conversion-service</name>
     <dependencies>
+        <!-- Spring MVC REST controllers and RestClient support -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Declarative HTTP client for inter-service communication -->
+        <!-- Declarative HTTP client for open feign inter-service communication -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- Provides WebClient and reactive types such as Mono -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
         <dependency>

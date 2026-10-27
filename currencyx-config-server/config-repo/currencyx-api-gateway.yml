@@ -1,0 +1,25 @@
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            # Forward exchange API requests to the Exchange Service.
+            - id: currency-exchange-route
+              uri: lb://CURRENCY-EXCHANGE-SERVICE
+              predicates:
+                - Path=/currency-exchange/**
+
+            # Forward conversion API requests to the Conversion Service.
+            - id: currency-conversion-route
+              uri: lb://CURRENCY-CONVERSION-SERVICE
+              predicates:
+                - Path=/currency-conversion/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true

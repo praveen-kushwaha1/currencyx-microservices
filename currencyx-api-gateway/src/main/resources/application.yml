@@ -1,6 +1,16 @@
+
 server:
   port: 8080
 
 spring:
   application:
     name: currencyx-api-gateway
+
+  config:
+    import: "optional:configserver:http://localhost:8888"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

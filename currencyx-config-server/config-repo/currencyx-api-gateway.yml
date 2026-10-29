@@ -15,7 +15,7 @@ spring:
             - id: currency-conversion-route
               uri: lb://CURRENCY-CONVERSION-SERVICE
               predicates:
-                - Path=/currency-conversion/**
+                - Path=/api/conversion/**
 
 eureka:
   client:

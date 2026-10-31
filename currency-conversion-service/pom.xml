@@ -83,7 +83,16 @@
             <artifactId>feign-micrometer</artifactId>
         </dependency>
 
+        <!-- Converts Logback logs into structured JSON. -->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>8.0</version>
+        </dependency>
+
     </dependencies>
+
+
 
     <build>
         <plugins>

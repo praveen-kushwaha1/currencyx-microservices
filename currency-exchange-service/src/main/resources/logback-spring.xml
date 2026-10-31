@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <!-- Read application name from Spring configuration. -->
+    <springProperty
+            scope="context"
+            name="applicationName"
+            source="spring.application.name"
+            defaultValue="currencyx-service"/>
+
+    <!-- Console logging in structured JSON format. -->
+    <appender name="CONSOLE"
+              class="ch.qos.logback.core.ConsoleAppender">
+
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+
+            <!-- Identify the microservice generating the log. -->
+            <customFields>
+                {"application":"${applicationName}","environment":"development"}
+            </customFields>
+
+        </encoder>
+    </appender>
+
+    <!-- Send JSON logs to Logstash through TCP. -->
+    <appender name="LOGSTASH"
+              class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+
+        <destination>localhost:5000</destination>
+
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+
+            <customFields>
+                {"application":"${applicationName}","environment":"development"}
+            </customFields>
+
+        </encoder>
+
+    </appender>
+
+    <!-- Root logger sends logs to both appenders. -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LOGSTASH"/>
+    </root>
+
+</configuration>

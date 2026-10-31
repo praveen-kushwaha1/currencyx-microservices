@@ -1,32 +1,82 @@
 spring:
   application:
     name: api-gateway
+
   cloud:
     gateway:
+      # server:
+      #   webflux:
+      #     # Global timeout commented out as requested
+      #     httpclient:
+      #       response-timeout: 5s
+
       routes:
-        # Forward exchange API requests to the Exchange Service.
+        # ==========================================
+        # 1. Currency Exchange Route
+        # ==========================================
         - id: currency-exchange-route
+          # Load-balanced route pointing to the Currency Exchange service via Eureka
           uri: lb://CURRENCY-EXCHANGE-SERVICE
           predicates:
+            # Matches any incoming requests starting with /currency-exchange/
             - Path=/currency-exchange/**
 
-        # Forward conversion API requests to the Conversion Service, protected by a Circuit Breaker.
+        # ==========================================
+        # 2. Currency Conversion Route (Circuit Breaker Only)
+        # ==========================================
         - id: currency-conversion-route
+          # Load-balanced route pointing to the Currency Conversion service via Eureka
           uri: lb://CURRENCY-CONVERSION-SERVICE
           predicates:
+            # Matches any incoming requests starting with /api/conversion/
             - Path=/api/conversion/**
           filters:
-            # Protect this route with a reactive circuit breaker.
+            # --- Rate Limiter Filter (Commented Out) ---
+            # - name: RequestRateLimiter
+            #   args:
+            #     key-resolver: "#{@ipKeyResolver}"
+            #     redis-rate-limiter.replenishRate: 5
+            #     redis-rate-limiter.burstCapacity: 10
+            #     redis-rate-limiter.requestedTokens: 1
+
+            # --- Circuit Breaker Filter (Active) ---
+            # Protects against cascading failures by stopping calls when downstream is unhealthy
             - name: CircuitBreaker
               args:
+                # Name matching the Resilience4j configuration instance below
                 name: conversionGatewayCircuitBreaker
+                # Local fallback route URI invoked when the circuit is open or requests fail
                 fallbackUri: forward:/fallback/conversion
+                # Specific HTTP status codes that trigger the circuit breaker fallback
                 statusCodes:
                   - "500"
                   - "502"
                   - "503"
                   - "504"
 
+            # --- Retry Filter (Commented Out) ---
+            # - name: Retry
+            #   args:
+            #     retries: 2
+            #     methods:
+            #       - GET
+            #     statuses:
+            #       - BAD_GATEWAY
+            #       - SERVICE_UNAVAILABLE
+            #       - GATEWAY_TIMEOUT
+            #     backoff:
+            #       firstBackoff: 100ms
+            #       maxBackoff: 500ms
+            #       factor: 2
+            #       basedOnPreviousValue: false
+
+# Redis configuration is commented out since RequestRateLimiter is disabled.
+# data:
+#   redis:
+#     host: localhost
+#     port: 6379
+
+# Eureka Client configuration for service registration and dynamic discovery
 eureka:
   client:
     service-url:
@@ -34,33 +84,36 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
 
-# Resilience4j circuit breaker configuration.
+# ==========================================
+# Resilience4j Circuit Breaker Settings
+# ==========================================
 resilience4j:
   circuitbreaker:
     instances:
       conversionGatewayCircuitBreaker:
-        # Examine the last 10 recorded calls.
+        # Sliding window type based on the number of calls (COUNT_BASED)
         slidingWindowType: COUNT_BASED
+        # Size of the sliding window used to record call outcomes (last 10 calls)
         slidingWindowSize: 10
-
-        # Wait for at least 5 calls before evaluating failures.
+        # Minimum number of recorded calls required in the window before calculating error rates
         minimumNumberOfCalls: 5
-
-        # Open the circuit when at least 50% of calls fail.
+        # Failure rate percentage threshold (50%) required to trip/open the circuit breaker
         failureRateThreshold: 50
-
-        # Wait 10 seconds before trying recovery.
+        # Duration the circuit stays open before transitioning to half-open to test recovery (10 seconds)
         waitDurationInOpenState: 10s
-
-        # Permit 3 trial calls during recovery.
+        # Number of trial calls permitted in HALF_OPEN state to check if downstream service recovered
         permittedNumberOfCallsInHalfOpenState: 3
-
-        # Automatically transition to HALF_OPEN after the wait.
+        # Automatically move from OPEN to HALF_OPEN once the wait duration expires
         automaticTransitionFromOpenToHalfOpenEnabled: true
 
-# Expose basic health and metrics endpoints for development.
+# Spring Boot Actuator endpoint management and monitoring configuration
 management:
   endpoints:
     web:
       exposure:
+        # Exposing core operational health, info, and metrics endpoints
         include: health,info,metrics
+  endpoint:
+    health:
+      # Show detailed health information
+      show-details: always

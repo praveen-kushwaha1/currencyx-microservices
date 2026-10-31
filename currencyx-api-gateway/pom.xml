@@ -44,16 +44,22 @@
 
 
             <!-- Required for Redis-backed API rate limiting. -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-starter-data-redis-reactive</artifactId>-->
+<!--            </dependency>-->
 
 
             <!-- Health and metrics endpoints for monitoring the Gateway. -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-actuator</artifactId>
+            </dependency>
+
+            <!-- Exposes application metrics in Prometheus format. -->
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-registry-prometheus</artifactId>
             </dependency>
         </dependencies>
     <build>

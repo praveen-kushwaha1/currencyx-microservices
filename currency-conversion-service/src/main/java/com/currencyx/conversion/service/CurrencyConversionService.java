@@ -6,6 +6,8 @@ import com.currencyx.conversion.client.webclient.CurrencyExchangeWebClient;
 import com.currencyx.conversion.dto.CurrencyConversionResponse;
 import com.currencyx.conversion.dto.CurrencyExchangeResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -183,6 +185,17 @@ public class CurrencyConversionService {
                 convertedAmount,
                 exchangeResponse.getEnv()
         );
+    }
+    private static final Logger log =
+            LoggerFactory.getLogger(CurrencyConversionService.class);
+
+    public void testLogging() {
+
+        log.info("Currency conversion request received");
+
+        log.warn("Currency exchange rate is unavailable");
+
+        log.error("Currency conversion failed");
     }
 
     /**

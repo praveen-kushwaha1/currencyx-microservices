@@ -7,21 +7,21 @@ spring:
     name: currencyx-config-server
 
   # Activate the native profile to load configuration from local files.
-#  profiles:
-#    active: native
+  profiles:
+    active: native
 
   cloud:
     config:
       server:
-#        native:
-#          # Required: path to your local configuration repository.
-#          search-locations: file:///C:/Users/prave/Repo/Training/Currecnyx/CurrenMS/currencyx-microservices/currencyx-config-server/config-repo
+        native:
+          # Required: path to your local configuration repository.
+          search-locations: file:///C:/Users/prave/Repo/Training/Currecnyx/CurrenMS/currencyx-microservices/currencyx-config-server/config-repo
 
         # NOT REQUIRED FOR LOCAL CONFIGURATION:
-         git:
-           uri: https://github.com/praveen-kushwaha1/currencyx-microservices.git
-           search-paths: currencyx-config-server/config-repo
-           default-label: main
+#         git:
+#           uri: https://github.com/praveen-kushwaha1/currencyx-microservices.git
+#           search-paths: currencyx-config-server/config-repo
+#           default-label: main
 
 management:
   endpoints:

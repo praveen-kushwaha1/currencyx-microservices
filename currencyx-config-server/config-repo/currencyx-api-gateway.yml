@@ -111,9 +111,12 @@ management:
   endpoints:
     web:
       exposure:
-        # Exposing core operational health, info, and metrics endpoints
-        include: health,info,metrics
+        include: health,info,metrics,prometheus
+
   endpoint:
     health:
-      # Show detailed health information
       show-details: always
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
